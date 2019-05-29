@@ -1393,19 +1393,19 @@ jQuery.support = (function() {
 
 	support = {
 		// IE strips leading whitespace when .innerHTML is used
-		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
+		leadingWhitespace: true,
 
 		// Make sure that tbody elements aren't automatically inserted
 		// IE will insert them into empty tables
-		tbody: !div.getElementsByTagName("tbody").length,
+		tbody: true,
 
 		// Make sure that link elements get serialized correctly by innerHTML
 		// This requires a wrapper element in IE
-		htmlSerialize: !!div.getElementsByTagName("link").length,
+		htmlSerialize: true,
 
 		// Get the style information from getAttribute
 		// (IE uses .cssText instead)
-		style: /top/.test( a.getAttribute("style") ),
+		style: true,
 
 		// Make sure that URLs aren't manipulated
 		// (IE normalizes it by default)
@@ -1414,11 +1414,11 @@ jQuery.support = (function() {
 		// Make sure that element opacity exists
 		// (IE uses filter instead)
 		// Use a regex to work around a WebKit issue. See #5145
-		opacity: /^0.55/.test( a.style.opacity ),
+		opacity: true,
 
 		// Verify style float existence
 		// (IE uses styleFloat instead of cssFloat)
-		cssFloat: !!a.style.cssFloat,
+		cssFloat: true,
 
 		// Make sure that if no value is specified for a checkbox
 		// that it defaults to "on".
@@ -1430,7 +1430,7 @@ jQuery.support = (function() {
 		optSelected: opt.selected,
 
 		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
-		getSetAttribute: div.className !== "t",
+		getSetAttribute: true,
 
 		// Tests for enctype support on a form(#6743)
 		enctype: !!document.createElement("form").enctype,
@@ -1469,15 +1469,6 @@ jQuery.support = (function() {
 		delete div.test;
 	} catch( e ) {
 		support.deleteExpando = false;
-	}
-
-	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
-		div.attachEvent( "onclick", function() {
-			// Cloning a node shouldn't copy over any
-			// bound event handlers (IE does this)
-			support.noCloneEvent = false;
-		});
-		div.cloneNode( true ).fireEvent( "onclick" );
 	}
 
 	// Check if a radio maintains its value
@@ -1562,60 +1553,9 @@ jQuery.support = (function() {
 		div = document.createElement("div");
 		container.appendChild( div );
 
-		// Check if table cells still have offsetWidth/Height when they are set
-		// to display:none and there are still other visible table cells in a
-		// table row; if so, offsetWidth/Height are not reliable for use when
-		// determining if an element has been hidden directly using
-		// display:none (it is still safe to use offsets if a parent element is
-		// hidden; don safety goggles and see bug #4512 for more information).
-		// (only IE 8 fails this test)
-		div.innerHTML = "<table><tr><td style='" + paddingMarginBorder + "0;display:none'></td><td>t</td></tr></table>";
-		tds = div.getElementsByTagName( "td" );
-		isSupported = ( tds[ 0 ].offsetHeight === 0 );
-
-		tds[ 0 ].style.display = "";
-		tds[ 1 ].style.display = "none";
-
 		// Check if empty table cells still have offsetWidth/Height
 		// (IE <= 8 fail this test)
-		support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
-
-		// Check if div with explicit width and no margin-right incorrectly
-		// gets computed margin-right based on width of container. For more
-		// info see bug #3333
-		// Fails in WebKit before Feb 2011 nightlies
-		// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-		if ( window.getComputedStyle ) {
-			div.innerHTML = "";
-			marginDiv = document.createElement( "div" );
-			marginDiv.style.width = "0";
-			marginDiv.style.marginRight = "0";
-			div.style.width = "2px";
-			div.appendChild( marginDiv );
-			support.reliableMarginRight =
-				( parseInt( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
-		}
-
-		if ( typeof div.style.zoom !== "undefined" ) {
-			// Check if natively block-level elements act like inline-block
-			// elements when setting their display to 'inline' and giving
-			// them layout
-			// (IE < 8 does this)
-			div.innerHTML = "";
-			div.style.width = div.style.padding = "1px";
-			div.style.border = 0;
-			div.style.overflow = "hidden";
-			div.style.display = "inline";
-			div.style.zoom = 1;
-			support.inlineBlockNeedsLayout = ( div.offsetWidth === 3 );
-
-			// Check if elements with layout shrink-wrap their children
-			// (IE 6 does this)
-			div.style.display = "block";
-			div.style.overflow = "visible";
-			div.innerHTML = "<div style='width:5px;'></div>";
-			support.shrinkWrapBlocks = ( div.offsetWidth !== 3 );
-		}
+		support.reliableHiddenOffsets = true;
 
 		div.style.cssText = positionTopLeftWidthHeight + paddingMarginBorderVisibility;
 		div.innerHTML = html;
@@ -1644,7 +1584,7 @@ jQuery.support = (function() {
 
 		if ( window.getComputedStyle ) {
 			div.style.marginTop = "1%";
-			support.pixelMargin = ( window.getComputedStyle( div, null ) || { marginTop: 0 } ).marginTop !== "1%";
+			support.pixelMargin = true;
 		}
 
 		if ( typeof container.style.zoom !== "undefined" ) {
