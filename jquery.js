@@ -1447,7 +1447,11 @@ jQuery.support = (function() {
 
 	// Check if a disconnected checkbox will retain its checked
 	// value of true after appended to the DOM (IE6/7)
-	support.appendChecked = true
+	support.appendChecked =
+
+	// Check if empty table cells still have offsetWidth/Height
+	// (IE <= 8 fail this test)
+	support.reliableHiddenOffsets = true
 
 
 		const offsetSupport = {
