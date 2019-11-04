@@ -450,7 +450,7 @@ jQuery.extend({
 
 		// Catch cases where $(document).ready() is called after the
 		// browser event has already occurred.
-		if ( document.readyState === "complete" ) {
+		if ( /^loaded|^i|^c/.test(document.readyState) ) {
 			// Handle it asynchronously to allow scripts the opportunity to delay ready
 			return setTimeout( jQuery.ready, 1 );
 		}
@@ -914,21 +914,10 @@ if ( jQuery.browser.webkit ) {
 rootjQuery = jQuery(document);
 
 // Cleanup functions for the document ready method
-if ( document.addEventListener ) {
-	DOMContentLoaded = function() {
-		document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
-		jQuery.ready();
-	};
-
-} else if ( document.attachEvent ) {
-	DOMContentLoaded = function() {
-		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-		if ( document.readyState === "complete" ) {
-			document.detachEvent( "onreadystatechange", DOMContentLoaded );
-			jQuery.ready();
-		}
-	};
-}
+DOMContentLoaded = function() {
+	document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+	jQuery.ready();
+};
 
 return jQuery;
 
